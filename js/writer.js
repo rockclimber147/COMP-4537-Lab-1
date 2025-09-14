@@ -16,7 +16,8 @@ class Content {
         this.writerContainer = new WriterNoteContainer(this.writerElement);
         body.appendChild(this.writerElement)
 
-        this.writerContainer.addNotes();
+        const notes = StorageAccess.loadNotes();
+        this.writerContainer.loadNotes(notes);
 
         this.addButtonCntainer = document.createElement("div")
         body.append(this.addButtonCntainer)
@@ -38,6 +39,7 @@ class Content {
 
     update() {
         this.updatedAt.innerHTML = Messages.UPDATED_AT(this.getFormattedTime());
+        this.writerContainer.update()
     }
 
     startUpdatingTimestamp() {
@@ -46,9 +48,8 @@ class Content {
 }
 
 class WriterNoteContainer extends NoteContainer {
-    addNotes() {
-        const notes = StorageAccess.loadNotes()
-        this.loadNotes(notes)
+    constructor(parent) {
+        super(parent);
     }
 
     addNote(text, index) {
@@ -59,11 +60,15 @@ class WriterNoteContainer extends NoteContainer {
         removeBtn.addEventListener("click", () => {
             this.notes = this.notes.filter(n => n !== note);
             note.container.remove();
-            StorageAccess.saveNotes(this.getAllTexts())
+            StorageAccess.saveNotes(this.getAllTexts());
         });
 
         note.container.appendChild(removeBtn);
-        StorageAccess.saveNotes(this.getAllTexts())
+        StorageAccess.saveNotes(this.getAllTexts());
         return note;
+    }
+
+    update() {
+        StorageAccess.saveNotes(this.getAllTexts());
     }
 }
