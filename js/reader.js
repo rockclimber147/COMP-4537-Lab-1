@@ -18,6 +18,7 @@ class Content {
         backButton.render(body);
 
         this.update()
+        window.addEventListener("storage", () => this.update());
         this.startUpdatingTimestamp();
     }
 
