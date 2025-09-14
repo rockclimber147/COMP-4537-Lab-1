@@ -5,41 +5,46 @@ class Entry {
 }
 
 class Button {
-    constructor(buttontext) {
-        this.buttonElement = document.createElement("button");
-        this.buttonElement.innerHTML = buttontext
+  constructor(text, cssClasses = [], onClick = null) {
+    this.element = document.createElement("button");
+    this.element.textContent = text;
+    this.element.classList.add(...cssClasses);
+    if (onClick) {
+      this.element.addEventListener("click", onClick);
     }
+  }
 
-    onClick() {
-
-    }
+  render(parent) {
+    parent.appendChild(this.element);
+  }
 }
 
-class AddButton extends Button {
-    constructor(buttontext) {
-        super(buttontext)
-        this.buttonElement.classList.add(CSS.ADD_BUTTON)
-    }
-
+class EntryContainer {
+    
 }
 
-class RemoveButton extends Button {
-    constructor(buttontext) {
-        super(buttontext)
-        this.buttonElement.classList.add(CSS.REMOVE_BUTTON)
-    }
-}
+class Entry {
+  constructor(text = "", onRemove = null) {
+    this.container = document.createElement("div");
 
-class RedirectButton extends Button {
-    constructor(buttontext, redirectTarget) {
-        super(buttontext)
-        this.redirectTarget = redirectTarget
-        this.buttonElement.classList.add(CSS.ADD_BUTTON)
-    }
+    this.textarea = document.createElement("textarea");
+    this.textarea.value = text;
+    this.container.appendChild(this.textarea);
 
-    onClick() {
-        window.location.href(this.redirectTarget)
-    }
+    this.removeBtn = new Button("Remove", ["btn", "btn-danger"], () => {
+      this.container.remove();
+      if (onRemove) onRemove(this);
+    });
+    this.removeBtn.render(this.container);
+  }
+
+  getText() {
+    return this.textarea.value;
+  }
+
+  render(parent) {
+    parent.appendChild(this.container);
+  }
 }
 
 class StorageAccess {
@@ -49,6 +54,16 @@ class StorageAccess {
 
     static get(key) {
         return localStorage.getItem(key)
+    }
+
+    
+    static saveNotes(notesArray) {
+        localStorage.setItem(this.STORAGE_KEY, JSON.stringify(notesArray));
+    }
+
+    static loadNotes() {
+        const raw = localStorage.getItem(this.STORAGE_KEY);
+        return raw ? JSON.parse(raw) : [];
     }
 }
 
