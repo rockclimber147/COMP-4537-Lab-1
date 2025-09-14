@@ -21,23 +21,48 @@ export class RedirectButton extends Button {
   }
 }
 
-class EntryContainer {
+export class NoteContainer {
+  constructor(parent) {
+    this.parent = parent;
+    this.container = document.createElement("div");
+    this.container.classList.add("note-container");
+    this.notes = [];
+    this.parent.appendChild(this.container);
+  }
 
+  loadNotes(notesArray) {
+    this.clear();
+    notesArray.forEach((text, index) => this.addNote(text, index));
+  }
+
+  addNote(text = "", index = this.notes.length) {
+    const note = new Note(text, index);
+    this.notes.push(note);
+    note.render(this.container);
+    return note;
+  }
+
+  getAllTexts() {
+    return this.notes.map(note => note.getText());
+  }
+
+clear() {
+    this.notes.forEach(note => {
+        if (note.container.parentNode) {
+            note.container.parentNode.removeChild(note.container);
+        }
+    });
+    this.notes = [];
+}
 }
 
-class Entry {
-  constructor(text = "", onRemove = null) {
+class Note {
+  constructor(text, index) {
     this.container = document.createElement("div");
-
+    this.index = index
     this.textarea = document.createElement("textarea");
     this.textarea.value = text;
     this.container.appendChild(this.textarea);
-
-    this.removeBtn = new Button("Remove", ["btn", "btn-danger"], () => {
-      this.container.remove();
-      if (onRemove) onRemove(this);
-    });
-    this.removeBtn.render(this.container);
   }
 
   getText() {
@@ -50,15 +75,7 @@ class Entry {
 }
 
 export class StorageAccess {
-    static set(item) {
-        localStorage.setItem(item)
-    }
-
-    static get(key) {
-        return localStorage.getItem(key)
-    }
-
-    
+  static STORAGE_KEY = "notes";
     static saveNotes(notesArray) {
         localStorage.setItem(this.STORAGE_KEY, JSON.stringify(notesArray));
     }
