@@ -21,13 +21,13 @@ class Content {
 
         this.addButtonCntainer = document.createElement("div")
         body.append(this.addButtonCntainer)
-        this.addButton = new Button(Messages.ADD, [], () => {
+        this.addButton = new Button(Messages.ADD, [CSS.ADD_BUTTON], () => {
             this.writerContainer.addNote("", -1)
             StorageAccess.saveNotes(this.writerContainer.getAllTexts()) 
         })
         this.addButton.render(this.addButtonCntainer)
 
-        const backButton = new RedirectButton(Messages.BACK, [], Pages.INDEX);
+        const backButton = new RedirectButton(Messages.BACK, [CSS.BACK_BUTTON], Pages.INDEX);
         backButton.render(body);
 
         this.startUpdatingTimestamp();
@@ -38,7 +38,7 @@ class Content {
     }
 
     update() {
-        this.updatedAt.innerHTML = Messages.UPDATED_AT(this.getFormattedTime());
+        this.updatedAt.innerHTML = Messages.STORED_AT(this.getFormattedTime());
         this.writerContainer.update()
     }
 
@@ -55,15 +55,13 @@ class WriterNoteContainer extends NoteContainer {
     addNote(text, index) {
         const note = super.addNote(text, index);
 
-        const removeBtn = document.createElement("button");
-        removeBtn.textContent = "Remove";
-        removeBtn.addEventListener("click", () => {
+        const removeBtn = new Button(Messages.REMOVE, [CSS.REMOVE_BUTTON], () => {
             this.notes = this.notes.filter(n => n !== note);
             note.container.remove();
             StorageAccess.saveNotes(this.getAllTexts());
         });
 
-        note.container.appendChild(removeBtn);
+        removeBtn.render(note.container);
         StorageAccess.saveNotes(this.getAllTexts());
         return note;
     }

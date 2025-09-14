@@ -25,7 +25,7 @@ export class NoteContainer {
   constructor(parent) {
     this.parent = parent;
     this.container = document.createElement("div");
-    this.container.classList.add("note-container");
+    this.container.classList.add(CSS.NOTE_CONTAINER);
     this.notes = [];
     this.parent.appendChild(this.container);
   }
@@ -59,6 +59,7 @@ clear() {
 class Note {
   constructor(text, index) {
     this.container = document.createElement("div");
+    this.container.classList.add(CSS.NOTE)
     this.index = index
     this.textarea = document.createElement("textarea");
     this.textarea.value = text;
@@ -89,7 +90,10 @@ export class StorageAccess {
 export class CSS {
     static REMOVE_BUTTON = "remove-button"
     static ADD_BUTTON = "add-button"
+    static BACK_BUTTON = "back-button"
     static TEXT_BOX = "text-box"
+    static NOTE_CONTAINER = "note-container"
+    static NOTE = "note"
 }
 
 export class Pages {

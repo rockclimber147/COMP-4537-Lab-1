@@ -14,7 +14,7 @@ class Content {
 
         this.readerContainer = new ReaderNoteContainer(body);
 
-        const backButton = new RedirectButton(Messages.BACK, [], Pages.INDEX);
+        const backButton = new RedirectButton(Messages.BACK, [CSS.BACK_BUTTON], Pages.INDEX);
         backButton.render(body);
 
         this.update()
