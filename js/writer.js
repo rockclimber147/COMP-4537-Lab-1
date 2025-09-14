@@ -1,4 +1,4 @@
-import { RedirectButton, CSS, Pages, NoteContainer, StorageAccess } from "./script.js";
+import { Button, RedirectButton, CSS, Pages, NoteContainer, StorageAccess } from "./script.js";
 import { Messages } from "../lang/en/user.js";
 document.addEventListener("DOMContentLoaded", function (e) {
     new Content()
@@ -12,11 +12,21 @@ class Content {
         this.updatedAt.innerHTML = Messages.UPDATED_AT(this.getFormattedTime());
         body.appendChild(this.updatedAt);
 
-        this.writerContainer = new WriterNoteContainer(body);
+        this.writerElement = document.createElement("div")
+        this.writerContainer = new WriterNoteContainer(this.writerElement);
+        body.appendChild(this.writerElement)
+
+        this.addButtonCntainer = document.createElement("div")
+        body.append(this.addButtonCntainer)
+        this.addButton = new Button(Messages.ADD, [], () => {
+            this.writerContainer.addNote("", -1)
+        })
+        this.addButton.render(this.addButtonCntainer)
 
         const backButton = new RedirectButton(Messages.BACK, [], Pages.INDEX);
         backButton.render(body);
 
+        this.update()
         this.startUpdatingTimestamp();
     }
 
@@ -26,6 +36,7 @@ class Content {
 
     update() {
         this.updatedAt.innerHTML = Messages.UPDATED_AT(this.getFormattedTime());
+        StorageAccess.saveNotes(this.writerContainer.getAllTexts())
         this.writerContainer.clear()
         this.writerContainer.addNotes()
     }
@@ -38,7 +49,6 @@ class Content {
 class WriterNoteContainer extends NoteContainer {
     addNotes() {
         const notes = StorageAccess.loadNotes()
-        console.log(notes)
         this.loadNotes(notes)
     }
 
@@ -48,11 +58,13 @@ class WriterNoteContainer extends NoteContainer {
         const removeBtn = document.createElement("button");
         removeBtn.textContent = "Remove";
         removeBtn.addEventListener("click", () => {
-        this.notes = this.notes.filter(n => n !== note);
-        note.container.remove();
+            this.notes = this.notes.filter(n => n !== note);
+            note.container.remove();
+            StorageAccess.saveNotes(this.getAllTexts())
         });
 
         note.container.appendChild(removeBtn);
+        StorageAccess.saveNotes(this.getAllTexts())
         return note;
     }
 }
