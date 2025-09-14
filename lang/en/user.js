@@ -1,9 +1,9 @@
-class Messages {
-    READER = "reader"
-    WRITER = "writer"
+export class Messages {
+    static READER = "reader"
+    static WRITER = "writer"
 }
 
-class ButtonMessages {
-    ADD = "add"
-    REMOVE = "remove"
+export class ButtonMessages {
+    static ADD = "add"
+    static REMOVE = "remove"
 }

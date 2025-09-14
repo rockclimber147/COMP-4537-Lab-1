@@ -1,10 +1,4 @@
-class Entry {
-    constructor(content) {
-        this.content = content
-    }
-}
-
-class Button {
+export class Button {
   constructor(text, cssClasses = [], onClick = null) {
     this.element = document.createElement("button");
     this.element.textContent = text;
@@ -19,8 +13,16 @@ class Button {
   }
 }
 
+export class RedirectButton extends Button {
+  constructor(text, cssClasses = [], filename) {
+    super(text, cssClasses, () => {
+      window.location.href = filename;
+    });
+  }
+}
+
 class EntryContainer {
-    
+
 }
 
 class Entry {
@@ -47,7 +49,7 @@ class Entry {
   }
 }
 
-class StorageAccess {
+export class StorageAccess {
     static set(item) {
         localStorage.setItem(item)
     }
@@ -67,8 +69,14 @@ class StorageAccess {
     }
 }
 
-class CSS {
-    REMOVE_BUTTON = "remove-button"
-    ADD_BUTTON = "add-button"
-    TEXT_BOX = "text-box"
+export class CSS {
+    static REMOVE_BUTTON = "remove-button"
+    static ADD_BUTTON = "add-button"
+    static TEXT_BOX = "text-box"
+}
+
+export class Pages {
+  static INDEX = "index.html"
+  static READER = "reader.html"
+  static WRITER = "writer.html"
 }
