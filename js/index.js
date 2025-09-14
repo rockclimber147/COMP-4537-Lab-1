@@ -6,10 +6,12 @@ document.addEventListener("DOMContentLoaded", function (e) {
 
 class Content {
     constructor() {
-        const body = document.body
+        const title = document.getElementById("title")
+        title.innerHTML = Messages.TITLE
+        const navDiv = document.getElementById("nav")
         const readButton = new RedirectButton(Messages.READER, [], Pages.READER)
-        readButton.render(body)
+        readButton.render(nav)
         const writeButton = new RedirectButton(Messages.WRITER, [], Pages.WRITER)
-        writeButton.render(body)
+        writeButton.render(nav)
     }
 }

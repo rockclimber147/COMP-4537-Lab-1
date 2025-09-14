@@ -1,4 +1,6 @@
 export class Messages {
+    static TITLE = "Daylen Smith, A01357997"
+
     static READER = "reader"
     static WRITER = "writer"
     static BACK = "back"
